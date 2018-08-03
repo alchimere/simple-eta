@@ -25,7 +25,7 @@ class SimpleETA
 
   def show(current)
     current += 1
-    print(@format % [@total, current, percent(current).round(2), duration, eta(current)])
+    print(@format % [@total, current, percent(current), duration, eta(current)])
     print("\n") if current == @total
   end
 
