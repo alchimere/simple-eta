@@ -1,11 +1,11 @@
 # Usage example:
-#  eta = SimpleETA.new(100)
-#  100.times { |i| sleep 1; eta.show(i) }
+#  eta = SimpleETA::ETA.new(100)
+#  100.times { |i| sleep 1; eta.next! }
 #
 # => [59/100] 59.00% ETA 00m 41s
 #
 class SimpleETA
-  DEFAULT_FORMAT = "\r[%{current}/%{total}] %{percent}%% ETA %{eta}"
+  DEFAULT_FMT = "\r[%{current}/%{total}] %{percent}%% ETA %{eta} (%{duration})"
   KEYWORDS = {
     "%{total}" => "%1$d",
     "%{current}" => "%2$d",
@@ -15,16 +15,26 @@ class SimpleETA
   }
 
   def initialize(total, opts = {})
-    @start_time = opts[:start_time] || Time.now
+    reset!(opts)
     @total = total.to_i
-    @format = opts[:format] || DEFAULT_FORMAT
+    @format = opts[:format] || DEFAULT_FMT
     KEYWORDS.each do |keyword, val|
       @format.gsub!(keyword, val)
     end
   end
 
-  def show(current)
-    current += 1
+  def reset!(opts = {})
+    @start_time = opts[:start_time] || Time.now
+    @current = 0
+  end
+
+  def next!
+    @current += 1
+    show
+  end
+
+  def show
+    current = @current
     print(@format % [@total, current, percent(current), duration, eta(current)])
     print("\n") if current == @total
   end
@@ -41,7 +51,7 @@ class SimpleETA
   end
 
   def eta(current)
-    if current > 0
+    if current > 0 && current <= @total
       dur = (Time.now - @start_time).to_i
       remaining = dur * (@total - current) / current
       "%02dm %02ds" % [(remaining/60), (remaining%60)]
