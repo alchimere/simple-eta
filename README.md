@@ -1,3 +1,5 @@
+[![Gem Version](https://badge.fury.io/rb/simple_eta.svg)](https://badge.fury.io/rb/simple_eta)
+
 # simple-eta
 Very simple ETA class to use in every day scripts - ruby 1.8.7 compatible
 
