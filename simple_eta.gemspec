@@ -10,4 +10,6 @@ Gem::Specification.new do |s|
   s.homepage    =
     'http://rubygems.org/gems/simple_eta'
   s.license       = 'MIT'
+
+  s.add_development_dependency 'rspec', '~> 2.0'
 end

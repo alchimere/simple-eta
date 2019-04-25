@@ -1,0 +1,43 @@
+language: ruby
+#email: false
+# cache:
+#   directories:
+#     - ../bundle
+before_install:
+#  - "script/update_rubygems_and_install_bundler"
+  - gem install rspec -v '~>2.0'
+  - unset _JAVA_OPTIONS
+#  - "script/clone_all_rspec_repos"
+bundler_args: "--binstubs --standalone --without documentation --path ../bundle"
+script: "rspec"
+rvm:
+  - 1.8
+  - 1.9
+  - 2.0
+  - 2.1
+  - 2.2
+  - 2.3
+  - 2.4
+  - 2.5
+  - 2.6
+  - ruby-head
+  - ree
+  - rbx-3
+  - jruby-9.1.7.0 # pin JRuby to this until travis/rvm can install later versions
+  - jruby-head
+  - jruby-1.7
+env:
+  - JRUBY_OPTS='--dev'
+matrix:
+  include:
+    - rvm: jruby-1.7
+      env: JRUBY_OPTS='--dev --1.8'
+  allow_failures:
+    - rvm: jruby-head
+    - rvm: ruby-head
+    - rvm: rbx-3
+  fast_finish: true
+# branches:
+#   only:
+#     - master
+# - /^\d+-\d+-maintenance$/
